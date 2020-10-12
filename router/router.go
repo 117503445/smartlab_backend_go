@@ -1,6 +1,8 @@
 package router
 
 import (
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"smartlab/api"
 	"smartlab/middleware"
 
@@ -14,11 +16,11 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Cors())
 
 	// 路由
-	v1 := r.Group("/api/v1")
+	groupApi := r.Group("/api")
 	{
-		v1.POST("ping", api.Ping)
+		groupApi.POST("ping", api.Ping)
 
-		user := v1.Group("user")
+		user := groupApi.Group("user")
 		{
 			// 用户注册
 			user.POST("", api.UserCreate)
@@ -35,7 +37,7 @@ func NewRouter() *gin.Engine {
 				auth.PUT("", api.UserUpdate)
 			}
 		}
-		admin := v1.Group("admin")
+		admin := groupApi.Group("admin")
 		// 需要登录保护
 		admin.Use(middleware.JwtMiddleware.MiddlewareFunc())
 		admin.Use(middleware.HasRole("admin"))
@@ -46,5 +48,7 @@ func NewRouter() *gin.Engine {
 			}
 		}
 	}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	return r
 }

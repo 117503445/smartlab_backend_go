@@ -1,0 +1,55 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "title": "smartlab",
+        "contact": {
+            "name": "117503445",
+            "url": "http://www.117503445.top",
+            "email": "t117503445@gmail.com"
+        },
+        "license": {
+            "name": "GNU GPL 3.0",
+            "url": "https://github.com/TGclub/smartlab_backend_go/blob/main/LICENSE"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost",
+    "basePath": "/api",
+    "paths": {
+        "/ping": {
+            "post": {
+                "description": "返回 pong",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "状态检查",
+                "operationId": "ping",
+                "responses": {
+                    "200": {
+                        "description": "pong",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "x-extension-openapi": {
+        "example": "value on a json format"
+    }
+}

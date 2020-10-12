@@ -3,6 +3,7 @@ module smartlab
 go 1.15
 
 require (
+	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/deckarep/golang-set v1.7.1
 	github.com/devfeel/mapper v0.7.4
@@ -12,6 +13,8 @@ require (
 	github.com/go-redis/redis v6.15.3+incompatible
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.5.1
+	github.com/swaggo/gin-swagger v1.2.0
+	github.com/swaggo/swag v1.6.7
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
 	gopkg.in/yaml.v2 v2.2.8
 	gorm.io/driver/mysql v1.0.1

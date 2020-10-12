@@ -45,7 +45,7 @@ func TestMain(m *testing.M) {
 }
 func TestPing(t *testing.T) {
 
-	_, response := httpPost(t, r, "/api/v1/ping", nil, "")
+	_, response := httpPost(t, r, "/api/ping", nil, "")
 
 	expectResponse := "\"pong\""
 	assert.Equal(t, expectResponse, response)
@@ -59,7 +59,7 @@ func TestUserRegister(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	code, response := httpPostJson(t, r, "/api/v1/user", nil, userCreateUpdateIn)
+	code, response := httpPostJson(t, r, "/api/user", nil, userCreateUpdateIn)
 
 	assert.Equal(t, http.StatusOK, code)
 
@@ -81,7 +81,7 @@ func TestUserRegisterParamNotValidError(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	code, response := httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	code, response := httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	assert.Equal(t, http.StatusBadRequest, code)
 
@@ -104,14 +104,14 @@ func TestUserLogin(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userLoginDto := dto.UserLoginIn{
 		UserName: "user1",
 		Password: "pass1",
 	}
 
-	code, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginDto)
+	code, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 
 	assert.Equal(t, http.StatusOK, code)
 
@@ -133,17 +133,17 @@ func TestUserMe(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userLoginDto := dto.UserLoginIn{
 		UserName: "user1",
 		Password: "pass1",
 	}
 
-	_, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginDto)
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 	authorization := "Bearer " + response["token"].(string)
 
-	code, response := httpGetJson(t, r, "/api/v1/user/me", map[string]string{"Authorization": authorization})
+	code, response := httpGetJson(t, r, "/api/user/me", map[string]string{"Authorization": authorization})
 	assert.Equal(t, http.StatusOK, code)
 
 	expectResponse := gin.H{
@@ -159,7 +159,7 @@ func TestUserMe(t *testing.T) {
 }
 func TestUserMeUnauthorized(t *testing.T) {
 
-	request, err := http.NewRequest(http.MethodGet, "/api/v1/user/me", nil)
+	request, err := http.NewRequest(http.MethodGet, "/api/user/me", nil)
 	assert.Nil(t, err)
 
 	recorder := httptest.NewRecorder()
@@ -199,14 +199,14 @@ func TestUserUpdate(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userLoginDto := dto.UserLoginIn{
 		UserName: "user1",
 		Password: "pass1",
 	}
 
-	_, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginDto)
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 	authorization := "Bearer " + response["token"].(string)
 
 	userCreateIn = dto.UserCreateIn{
@@ -214,7 +214,7 @@ func TestUserUpdate(t *testing.T) {
 		Password: "pass1",
 		Avatar:   "newAva",
 	}
-	code, response := httpPutJson(t, r, "/api/v1/user", map[string]string{"Authorization": authorization},
+	code, response := httpPutJson(t, r, "/api/user", map[string]string{"Authorization": authorization},
 		userCreateIn)
 
 	assert.Equal(t, http.StatusOK, code)
@@ -236,17 +236,17 @@ func TestUserUpdateOptionalPassword(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userLoginIn := dto.UserLoginIn{
 		UserName: "user1",
 		Password: "pass1",
 	}
 
-	_, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginIn)
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginIn)
 	authorization := "Bearer " + response["token"].(string)
 
-	_, response = httpPutJson(t, r, "/api/v1/user", map[string]string{"Authorization": authorization},
+	_, response = httpPutJson(t, r, "/api/user", map[string]string{"Authorization": authorization},
 		gin.H{"password": "pass2"})
 
 	userLoginIn = dto.UserLoginIn{
@@ -254,7 +254,7 @@ func TestUserUpdateOptionalPassword(t *testing.T) {
 		Password: "pass2",
 	}
 
-	_, response = httpPostJson(t, r, "/api/v1/user/login", nil, userLoginIn)
+	_, response = httpPostJson(t, r, "/api/user/login", nil, userLoginIn)
 
 	expectResponse := gin.H{
 		"code": float64(200),
@@ -272,7 +272,7 @@ func TestUserUpdateRepeatUsernameError(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userCreateIn = dto.UserCreateIn{
 		UserName: "user2",
@@ -280,14 +280,14 @@ func TestUserUpdateRepeatUsernameError(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userLoginDto := dto.UserLoginIn{
 		UserName: "user1",
 		Password: "pass1",
 	}
 
-	_, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginDto)
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 	authorization := "Bearer " + response["token"].(string)
 
 	userCreateIn = dto.UserCreateIn{
@@ -295,7 +295,7 @@ func TestUserUpdateRepeatUsernameError(t *testing.T) {
 		Password: "pass1",
 		Avatar:   "newAva",
 	}
-	code, response := httpPutJson(t, r, "/api/v1/user", map[string]string{"Authorization": authorization},
+	code, response := httpPutJson(t, r, "/api/user", map[string]string{"Authorization": authorization},
 		userCreateIn)
 
 	assert.Equal(t, http.StatusBadRequest, code)
@@ -315,7 +315,7 @@ func TestUserUpdateParamNotValidError(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userCreateIn = dto.UserCreateIn{
 		UserName: "user2",
@@ -323,14 +323,14 @@ func TestUserUpdateParamNotValidError(t *testing.T) {
 		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
 	}
 
-	httpPostJson(t, r, "/api/v1/user", nil, userCreateIn)
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
 
 	userLoginDto := dto.UserLoginIn{
 		UserName: "user1",
 		Password: "pass1",
 	}
 
-	_, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginDto)
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 	authorization := "Bearer " + response["token"].(string)
 
 	userCreateIn = dto.UserCreateIn{
@@ -338,7 +338,7 @@ func TestUserUpdateParamNotValidError(t *testing.T) {
 		Password: "pass1",
 		Avatar:   "newAva",
 	}
-	code, response := httpPutJson(t, r, "/api/v1/user", map[string]string{"Authorization": authorization},
+	code, response := httpPutJson(t, r, "/api/user", map[string]string{"Authorization": authorization},
 		userCreateIn)
 
 	assert.Equal(t, http.StatusBadRequest, code)
@@ -363,9 +363,9 @@ func TestAdminUserRead(t *testing.T) {
 		UserName: "admin",
 		Password: password,
 	}
-	_, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginDto)
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 	authorization := "Bearer " + response["token"].(string)
-	code, response := httpGetJson(t, r, "/api/v1/admin/user/1", map[string]string{"Authorization": authorization})
+	code, response := httpGetJson(t, r, "/api/admin/user/1", map[string]string{"Authorization": authorization})
 	assert.Equal(t, http.StatusOK, code)
 
 	expectResponse := gin.H{
@@ -391,9 +391,9 @@ func TestAdminUserReadNotFoundError(t *testing.T) {
 		UserName: "admin",
 		Password: password,
 	}
-	_, response := httpPostJson(t, r, "/api/v1/user/login", nil, userLoginDto)
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 	authorization := "Bearer " + response["token"].(string)
-	code, response := httpGetJson(t, r, "/api/v1/admin/user/2", map[string]string{"Authorization": authorization})
+	code, response := httpGetJson(t, r, "/api/admin/user/2", map[string]string{"Authorization": authorization})
 	assert.Equal(t, http.StatusNotFound, code)
 
 	expectResponse := gin.H{
@@ -414,7 +414,7 @@ func TestAdminUserReadNoRoleError(t *testing.T) {
 	password := string(bytes)
 	assert.Equal(t, 12, len(password))
 
-	code, response := httpGetJson(t, r, "/api/v1/admin/user/1", nil)
+	code, response := httpGetJson(t, r, "/api/admin/user/1", nil)
 	assert.Equal(t, http.StatusUnauthorized, code)
 
 	expectResponse := gin.H{

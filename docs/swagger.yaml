@@ -1,0 +1,38 @@
+basePath: /api
+host: localhost
+info:
+  contact:
+    email: t117503445@gmail.com
+    name: "117503445"
+    url: http://www.117503445.top
+  license:
+    name: GNU GPL 3.0
+    url: https://github.com/TGclub/smartlab_backend_go/blob/main/LICENSE
+  title: smartlab
+  version: "1.0"
+paths:
+  /ping:
+    post:
+      consumes:
+      - application/json
+      description: 返回 pong
+      operationId: ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: pong
+          schema:
+            type: string
+      summary: 状态检查
+schemes:
+- http
+- https
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
+x-extension-openapi:
+  example: value on a json format
