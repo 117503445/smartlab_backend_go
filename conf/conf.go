@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"smartlab/cache"
 	"smartlab/model"
 	"smartlab/util"
 
@@ -33,5 +32,4 @@ func Init() {
 
 	// 连接数据库
 	model.InitDatabase()
-	cache.Redis()
 }
