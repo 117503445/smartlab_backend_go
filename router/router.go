@@ -20,6 +20,11 @@ func NewRouter() *gin.Engine {
 	{
 		groupApi.POST("ping", api.Ping)
 
+		dataLog := groupApi.Group("DataLog")
+		{
+			dataLog.POST("", api.DataLogCreate)
+		}
+
 		user := groupApi.Group("user")
 		{
 			// 用户注册

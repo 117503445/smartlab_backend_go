@@ -1,0 +1,59 @@
+POST http://localhost/api/v1/user
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "pass1",
+  "avatar":"https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png"
+}
+###
+
+POST http://localhost/api/v1/user
+Content-Type: application/json
+
+{
+  "username": "user2",
+  "password": "pass2"
+}
+###
+POST http://localhost/api/v1/user/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "pass1"
+}
+###
+POST http://localhost/api/v1/user/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "FXj750v4cHdM"
+}
+###
+POST http://localhost/api/v1/user/login
+Content-Type: application/json
+
+{
+  "username": "user2",
+  "password": "pass2"
+}
+###
+GET http://localhost/api/v1/user/me
+Content-Type: application/json
+###
+GET http://localhost/api/v1/user/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDE3MzEzOTEsIm9yaWdfaWF0IjoxNjAxNzI3NzkxLCJ1c2VyIjoidXNlcjEifQ.DqKQxA6GRmRyB4ZX7QGfsr1NtcuKoS2m-LrGI47JmDM
+###
+PUT http://localhost/api/v1/user
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDE3MzI2MzYsIm9yaWdfaWF0IjoxNjAxNzI5MDM2LCJ1c2VyIjoidXNlcjEifQ.z8Q3_jnP18MFneyOD2xQ9Ujubasx5n7UDtDEPxZWzZ8
+
+{
+  "password":"pass2"
+}
+###
+GET http://localhost/api/v1/admin/user/2
+Content-Type: application/json

@@ -1,0 +1,7 @@
+POST http://localhost/api/DataLog
+
+{
+  "content": "string",
+  "openid": "string",
+  "page": "string"
+}

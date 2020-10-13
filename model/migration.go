@@ -9,5 +9,7 @@ func migration() {
 	if err := DB.AutoMigrate(&User{}); err != nil {
 		util.Log().Error("AutoMigrate User Failed", err)
 	}
-
+	if err := DB.AutoMigrate(&DataLog{}); err != nil {
+		util.Log().Error("AutoMigrate DataLog Failed", err)
+	}
 }

@@ -4,11 +4,6 @@ mysql:
   username: root
   password: 
   dbname: smartlab
-redis:
-  host: localhost
-  port: 6379
-  password: 
-  dbname: smartlab
 gin:
   port: 80
   mode: debug

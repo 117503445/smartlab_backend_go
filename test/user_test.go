@@ -24,7 +24,7 @@ import (
 
 var r *gin.Engine
 
-func initCleanDatabase() {
+func InitCleanDatabase() {
 	dbName := viper.GetString("mysql.dbname")
 	if _, err := model.Exec(fmt.Sprintf("drop database %v", dbName)); err != nil {
 		panic("删除数据库失败")
@@ -229,7 +229,7 @@ func TestUserUpdate(t *testing.T) {
 
 }
 func TestUserUpdateOptionalPassword(t *testing.T) {
-	initCleanDatabase()
+	InitCleanDatabase()
 	userCreateIn := dto.UserCreateIn{
 		UserName: "user1",
 		Password: "pass1",
@@ -265,7 +265,7 @@ func TestUserUpdateOptionalPassword(t *testing.T) {
 
 }
 func TestUserUpdateRepeatUsernameError(t *testing.T) {
-	initCleanDatabase()
+	InitCleanDatabase()
 	userCreateIn := dto.UserCreateIn{
 		UserName: "user1",
 		Password: "pass1",
@@ -308,7 +308,7 @@ func TestUserUpdateRepeatUsernameError(t *testing.T) {
 	}
 }
 func TestUserUpdateParamNotValidError(t *testing.T) {
-	initCleanDatabase()
+	InitCleanDatabase()
 	userCreateIn := dto.UserCreateIn{
 		UserName: "user1",
 		Password: "pass1",
@@ -379,7 +379,7 @@ func TestAdminUserRead(t *testing.T) {
 	}
 }
 func TestAdminUserReadNotFoundError(t *testing.T) {
-	initCleanDatabase()
+	InitCleanDatabase()
 
 	filePath := util.FilePasswordAdmin
 	bytes, err := ioutil.ReadFile(filePath)
@@ -420,6 +420,24 @@ func TestAdminUserReadNoRoleError(t *testing.T) {
 	expectResponse := gin.H{
 		"code":    float64(401),
 		"message": "cookie token is empty",
+	}
+
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+
+func TestDataLogCreate(t *testing.T) {
+	var userCreateUpdateIn = dto.DataLogIn{
+		OpenID:  "OpenID",
+		Page:    "Page",
+		Content: "Content",
+	}
+	code, response := httpPostJson(t, r, "/api/DataLog", nil, userCreateUpdateIn)
+	assert.Equal(t, http.StatusOK, code)
+
+	expectResponse := gin.H{
+		"ID": float64(1),
 	}
 
 	for k := range expectResponse {
