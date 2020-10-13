@@ -24,7 +24,10 @@ func NewRouter() *gin.Engine {
 		{
 			dataLog.POST("", api.DataLogCreate)
 		}
-
+		behaviorLog := groupApi.Group("BehaviorLog")
+		{
+			behaviorLog.POST("", api.BehaviorLogCreate)
+		}
 		user := groupApi.Group("user")
 		{
 			// 用户注册

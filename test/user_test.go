@@ -428,12 +428,30 @@ func TestAdminUserReadNoRoleError(t *testing.T) {
 }
 
 func TestDataLogCreate(t *testing.T) {
-	var userCreateUpdateIn = dto.DataLogIn{
+	var dataLogIn = dto.DataLogIn{
 		OpenID:  "OpenID",
 		Page:    "Page",
 		Content: "Content",
 	}
-	code, response := httpPostJson(t, r, "/api/DataLog", nil, userCreateUpdateIn)
+	code, response := httpPostJson(t, r, "/api/DataLog", nil, dataLogIn)
+	assert.Equal(t, http.StatusOK, code)
+
+	expectResponse := gin.H{
+		"ID": float64(1),
+	}
+
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+
+func TestBehaviorLogCreate(t *testing.T) {
+	var behaviorLogIn = dto.BehaviorLogIn{
+		OpenID:  "OpenID",
+		Page:    "Page",
+		Control: "Control",
+	}
+	code, response := httpPostJson(t, r, "/api/BehaviorLog", nil, behaviorLogIn)
 	assert.Equal(t, http.StatusOK, code)
 
 	expectResponse := gin.H{

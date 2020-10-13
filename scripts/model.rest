@@ -5,3 +5,13 @@ POST http://localhost/api/DataLog
   "openid": "string",
   "page": "string"
 }
+
+###
+
+POST http://localhost/api/BehaviorLog
+
+{
+  "control": "string",
+  "openid": "string",
+  "page": "string"
+}
