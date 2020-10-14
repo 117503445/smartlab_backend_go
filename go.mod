@@ -5,16 +5,18 @@ go 1.15
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/appleboy/gin-jwt/v2 v2.6.4
+	github.com/asmcos/requests v0.0.0-20200816142649-95abc76c8cac
 	github.com/deckarep/golang-set v1.7.1
 	github.com/devfeel/mapper v0.7.4
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.2.0
+	github.com/spf13/cast v1.3.1 // indirect
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.5.1
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.7
-	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
+	golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37
 	gopkg.in/yaml.v2 v2.2.8
 	gorm.io/driver/mysql v1.0.1
 	gorm.io/gorm v1.20.2

@@ -28,6 +28,12 @@ func NewRouter() *gin.Engine {
 		{
 			behaviorLog.POST("", api.BehaviorLogCreate)
 		}
+
+		wechat := groupApi.Group("wechat")
+		{
+			wechat.GET("/openid", api.GetOpenID)
+		}
+
 		user := groupApi.Group("user")
 		{
 			// 用户注册

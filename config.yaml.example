@@ -9,3 +9,6 @@ gin:
   mode: debug
 log:
   level: debug
+wechat:
+  appid:
+  secret:

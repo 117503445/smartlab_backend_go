@@ -22,6 +22,8 @@ const (
 	StatusRegisterError = 50003
 	// StatusModelToDtoError Model 转 Dto 失败
 	StatusModelToDtoError = 50004
+	// StatusWeChatLoginError 微信登录失败
+	StatusWeChatLoginError = 50005
 	// StatusParamError 各种奇奇怪怪的参数错误
 	StatusParamError = 40001
 	// StatusUsernameRepeat 用户名重复
