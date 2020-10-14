@@ -30,11 +30,6 @@ func Init() {
 	// 设置日志级别
 	util.BuildLogger(viper.GetString("log.level"))
 
-	// 读取翻译文件
-	if err := LoadLocales(filepath.Join(util.GetCurrentPath(), "locales", "zh-cn.yaml")); err != nil {
-		util.Log().Panic("翻译文件加载失败", err)
-	}
-
 	// 连接数据库
 	model.InitDatabase()
 }
