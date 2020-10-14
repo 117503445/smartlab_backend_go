@@ -7,6 +7,7 @@ import (
 	"smartlab/dto"
 	"smartlab/model"
 	"smartlab/serializer"
+	"smartlab/service"
 )
 
 // FeedbackCreate Feedback 创建
@@ -30,6 +31,9 @@ func FeedbackCreate(c *gin.Context) {
 	}
 
 	model.CreateFeedback(feedback)
+
+	service.ServerChanPushAll(feedback.FeedbackType, feedback.Content)
+
 	c.JSON(http.StatusOK, feedback)
 }
 
