@@ -495,6 +495,21 @@ func TestFeedbackCreate(t *testing.T) {
 		assert.Equal(t, expectResponse[k], response[k])
 	}
 }
+func TestFeedbackViewCSV(t *testing.T) {
+	var feedbackIn = dto.FeedbackIn{
+		OpenID:       "OpenID",
+		Page:         "Page",
+		Content:      "Content",
+		ContactInfo:  "ContactInfo",
+		FeedbackType: "FeedbackType",
+	}
+	code, _ := httpPostJson(t, r, "/api/feedback", nil, feedbackIn)
+	assert.Equal(t, http.StatusOK, code)
+
+	code, responseText := httpGet(t, r, "/api/feedback/csv", nil)
+	assert.Equal(t, http.StatusOK, code)
+	assert.Equal(t, "OpenID,Page,Content,ContactInfo,FeedbackType,CreatedAt\nOpenID,Page,Content,ContactInfo,FeedbackType,", responseText[0:100])
+}
 
 func httpRequest(t *testing.T, httpMethod string, router *gin.Engine, url string, headers map[string]string, body string) (responseCode int, responseText string) {
 	request, err := http.NewRequest(httpMethod, url, strings.NewReader(body))

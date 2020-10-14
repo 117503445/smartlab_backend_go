@@ -32,3 +32,8 @@ func FeedbackCreate(c *gin.Context) {
 	model.CreateFeedback(feedback)
 	c.JSON(http.StatusOK, feedback)
 }
+
+func FeedbackViewCSV(c *gin.Context) {
+	feedbacks := model.ReadAllFeedback()
+	c.String(http.StatusOK, model.FeedbackToCSV(feedbacks))
+}

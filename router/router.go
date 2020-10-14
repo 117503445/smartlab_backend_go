@@ -32,6 +32,7 @@ func NewRouter() *gin.Engine {
 		feedback := groupApi.Group("feedback")
 		{
 			feedback.POST("", api.FeedbackCreate)
+			feedback.GET("csv", api.FeedbackViewCSV)
 		}
 		wechat := groupApi.Group("wechat")
 		{
