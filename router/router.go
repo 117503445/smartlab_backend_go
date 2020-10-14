@@ -28,7 +28,10 @@ func NewRouter() *gin.Engine {
 		{
 			behaviorLog.POST("", api.BehaviorLogCreate)
 		}
-
+		feedback := groupApi.Group("feedback")
+		{
+			feedback.POST("", api.FeedbackCreate)
+		}
 		wechat := groupApi.Group("wechat")
 		{
 			wechat.GET("/openid", api.GetOpenID)

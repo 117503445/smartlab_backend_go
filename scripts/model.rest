@@ -15,3 +15,15 @@ POST http://localhost/api/BehaviorLog
   "openid": "string",
   "page": "string"
 }
+
+###
+
+POST http://localhost/api/feedback
+
+{
+  "contactInfo": "string",
+  "content": "string",
+  "openid": "string",
+  "page": "string",
+  "type": "string"
+}

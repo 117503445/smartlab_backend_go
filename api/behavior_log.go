@@ -25,7 +25,7 @@ func BehaviorLogCreate(c *gin.Context) {
 
 	var behaviorLog *model.BehaviorLog
 	if behaviorLog, err = behaviorLogIn.ToBehaviorLog(); err != nil {
-		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusDtoToModelError, "userRegisterInToUser failed", err))
+		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusDtoToModelError, "DTOtoModel failed", err))
 		return
 	}
 

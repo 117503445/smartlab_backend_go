@@ -15,4 +15,7 @@ func migration() {
 	if err := DB.AutoMigrate(&BehaviorLog{}); err != nil {
 		util.Log().Error("AutoMigrate BehaviorLog Failed", err)
 	}
+	if err := DB.AutoMigrate(&Feedback{}); err != nil {
+		util.Log().Error("AutoMigrate Feedback Failed", err)
+	}
 }

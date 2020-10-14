@@ -26,7 +26,7 @@ func DataLogCreate(c *gin.Context) {
 
 	var dataLog *model.DataLog
 	if dataLog, err = dataLogIn.ToDataLogIn(); err != nil {
-		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusDtoToModelError, "userRegisterInToUser failed", err))
+		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusDtoToModelError, "DTOtoModel failed", err))
 		return
 	}
 

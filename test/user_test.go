@@ -463,6 +463,26 @@ func TestBehaviorLogCreate(t *testing.T) {
 	}
 }
 
+func TestFeedbackCreate(t *testing.T) {
+	var feedbackIn = dto.FeedbackIn{
+		OpenID:       "OpenID",
+		Page:         "Page",
+		Content:      "Content",
+		ContactInfo:  "ContactInfo",
+		FeedbackType: "FeedbackType",
+	}
+	code, response := httpPostJson(t, r, "/api/feedback", nil, feedbackIn)
+	assert.Equal(t, http.StatusOK, code)
+
+	expectResponse := gin.H{
+		"ID": float64(1),
+	}
+
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+
 func httpRequest(t *testing.T, httpMethod string, router *gin.Engine, url string, headers map[string]string, body string) (responseCode int, responseText string) {
 	request, err := http.NewRequest(httpMethod, url, strings.NewReader(body))
 	assert.Nil(t, err)
