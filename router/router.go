@@ -27,6 +27,7 @@ func NewRouter() *gin.Engine {
 		behaviorLog := groupApi.Group("BehaviorLog")
 		{
 			behaviorLog.POST("", api.BehaviorLogCreate)
+			behaviorLog.GET("csv", api.BehaviorLogViewCSV)
 		}
 		feedback := groupApi.Group("feedback")
 		{

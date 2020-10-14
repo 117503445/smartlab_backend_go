@@ -18,6 +18,10 @@ POST http://localhost/api/BehaviorLog
 
 ###
 
+GET http://localhost/api/BehaviorLog/csv
+
+###
+
 POST http://localhost/api/feedback
 
 {

@@ -32,3 +32,8 @@ func BehaviorLogCreate(c *gin.Context) {
 	model.CreateBehaviorLog(behaviorLog)
 	c.JSON(http.StatusOK, behaviorLog)
 }
+
+func BehaviorLogViewCSV(c *gin.Context) {
+	behaviorLogs := model.ReadAllBehaviorLog()
+	c.String(http.StatusOK, model.BehaviorLogToCSV(behaviorLogs))
+}

@@ -462,6 +462,19 @@ func TestBehaviorLogCreate(t *testing.T) {
 		assert.Equal(t, expectResponse[k], response[k])
 	}
 }
+func TestBehaviorLogViewCSV(t *testing.T) {
+	var behaviorLogIn = dto.BehaviorLogIn{
+		OpenID:  "OpenID",
+		Page:    "Page",
+		Control: "Control",
+	}
+	code, _ := httpPostJson(t, r, "/api/BehaviorLog", nil, behaviorLogIn)
+	assert.Equal(t, http.StatusOK, code)
+
+	code, responseText := httpGet(t, r, "/api/BehaviorLog/csv", nil)
+	assert.Equal(t, http.StatusOK, code)
+	assert.Equal(t, "OpenID,Page,Control,CreatedAt\nOpenID,Page,Control", responseText[0:49])
+}
 
 func TestFeedbackCreate(t *testing.T) {
 	var feedbackIn = dto.FeedbackIn{
