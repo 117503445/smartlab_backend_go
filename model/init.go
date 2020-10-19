@@ -34,7 +34,7 @@ func InitDatabase() {
 		util.Log().Panic("创建数据库不成功", err)
 	}
 
-	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local", username, password, host, port, dbname)
+	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, port, dbname)
 	ormDB, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	// Error
 	if err != nil {

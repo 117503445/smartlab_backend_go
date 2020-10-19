@@ -12,3 +12,5 @@ log:
 wechat:
   appid:
   secret:
+serverchan:
+  - VIEW https://sc.ftqq.com/3.version
