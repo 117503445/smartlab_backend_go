@@ -13,7 +13,7 @@ import (
 func NewRouter() *gin.Engine {
 	r := gin.Default()
 
-	r.Use(middleware.Cors())
+	// r.Use(middleware.Cors())
 
 	// 路由
 	groupApi := r.Group("/api")
