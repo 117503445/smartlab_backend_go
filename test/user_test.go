@@ -511,6 +511,25 @@ func TestFeedbackViewCSV(t *testing.T) {
 	assert.Equal(t, "OpenID,Page,Content,ContactInfo,FeedbackType,CreatedAt\nOpenID,Page,Content,ContactInfo,FeedbackType,", responseText[0:100])
 }
 
+func TestBulletinCreate(t *testing.T) {
+	var bulletinIn = dto.BulletinIn{
+		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
+		Title:    "hello",
+	}
+	code, response := httpPostJson(t, r, "/api/Bulletin", nil, bulletinIn)
+	assert.Equal(t, http.StatusOK, code)
+
+	expectResponse := gin.H{
+		"imageUrl": "http://xd.117503445.top:8888/public/1.jpg",
+		"title":    "hello",
+		"ID":float64(1),
+	}
+
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+
 func httpRequest(t *testing.T, httpMethod string, router *gin.Engine, url string, headers map[string]string, body string) (responseCode int, responseText string) {
 	request, err := http.NewRequest(httpMethod, url, strings.NewReader(body))
 	assert.Nil(t, err)

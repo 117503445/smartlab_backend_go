@@ -19,7 +19,10 @@ func NewRouter() *gin.Engine {
 	groupApi := r.Group("/api")
 	{
 		groupApi.POST("ping", api.Ping)
-
+		bulletin := groupApi.Group("Bulletin")
+		{
+			bulletin.POST("", api.BulletinCreate)
+		}
 		dataLog := groupApi.Group("DataLog")
 		{
 			dataLog.POST("", api.DataLogCreate)
