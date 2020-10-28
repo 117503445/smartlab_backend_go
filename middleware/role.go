@@ -13,7 +13,7 @@ func HasRole(role string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		user := service.CurrentUser(c)
 		if user == nil {
-			c.JSON(http.StatusProxyAuthRequired, serializer.Err(http.StatusProxyAuthRequired, "has role failed: need auth", nil))
+			c.JSON(http.StatusUnauthorized, serializer.Err(http.StatusUnauthorized, "has role failed: need auth", nil))
 			c.Abort()
 			return
 		}
@@ -28,7 +28,7 @@ func HasRole(role string) gin.HandlerFunc {
 			}
 		}
 		if !isFound {
-			c.JSON(http.StatusProxyAuthRequired, serializer.Err(http.StatusProxyAuthRequired, "has role failed: don't have role "+role, nil))
+			c.JSON(http.StatusUnauthorized, serializer.Err(http.StatusUnauthorized, "has role failed: don't have role "+role, nil))
 			c.Abort()
 		}
 	}

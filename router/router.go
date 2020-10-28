@@ -21,7 +21,12 @@ func NewRouter() *gin.Engine {
 		groupApi.POST("ping", api.Ping)
 		bulletin := groupApi.Group("Bulletin")
 		{
-			bulletin.POST("", api.BulletinCreate)
+			auth := bulletin.Group("")
+			auth.Use(middleware.JwtMiddleware.MiddlewareFunc())
+			auth.Use(middleware.HasRole("admin"))
+			{
+				auth.POST("", api.BulletinCreate)
+			}
 		}
 		dataLog := groupApi.Group("DataLog")
 		{

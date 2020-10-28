@@ -512,17 +512,81 @@ func TestFeedbackViewCSV(t *testing.T) {
 }
 
 func TestBulletinCreate(t *testing.T) {
+	filePath := util.FilePasswordAdmin
+	bytes, err := ioutil.ReadFile(filePath)
+	assert.Nil(t, err)
+	password := string(bytes)
+	assert.Equal(t, 12, len(password))
+
+	userLoginDto := dto.UserLoginIn{
+		UserName: "admin",
+		Password: password,
+	}
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
+	authorization := "Bearer " + response["token"].(string)
+
 	var bulletinIn = dto.BulletinIn{
 		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
 		Title:    "hello",
 	}
-	code, response := httpPostJson(t, r, "/api/Bulletin", nil, bulletinIn)
+	code, response := httpPostJson(t, r, "/api/Bulletin",  map[string]string{"Authorization": authorization}, bulletinIn)
 	assert.Equal(t, http.StatusOK, code)
 
 	expectResponse := gin.H{
 		"imageUrl": "http://xd.117503445.top:8888/public/1.jpg",
 		"title":    "hello",
 		"ID":float64(1),
+	}
+
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+func TestBulletinCreateNoRoleError(t *testing.T) {
+	var bulletinIn = dto.BulletinIn{
+		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
+		Title:    "hello",
+	}
+	code, response := httpPostJson(t, r, "/api/Bulletin", nil, bulletinIn)
+	assert.Equal(t, http.StatusUnauthorized, code)
+
+	expectResponse := gin.H{
+		"message":    "cookie token is empty",
+		"code":float64(401),
+	}
+
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+func TestBulletinCreateUserNoRoleError(t *testing.T) {
+
+	userCreateIn := dto.UserCreateIn{
+		UserName: "user1",
+		Password: "pass1",
+		Avatar:   "https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png",
+	}
+
+	httpPostJson(t, r, "/api/user", nil, userCreateIn)
+
+	userLoginDto := dto.UserLoginIn{
+		UserName: "user1",
+		Password: "pass1",
+	}
+
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
+	authorization := "Bearer " + response["token"].(string)
+
+	var bulletinIn = dto.BulletinIn{
+		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
+		Title:    "hello",
+	}
+	code, response := httpPostJson(t, r, "/api/Bulletin",  map[string]string{"Authorization": authorization}, bulletinIn)
+	assert.Equal(t, http.StatusUnauthorized, code)
+
+	expectResponse := gin.H{
+		"message":    "has role failed: don't have role admin",
+		"code":float64(401),
 	}
 
 	for k := range expectResponse {
