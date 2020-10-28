@@ -11,7 +11,7 @@ type DataLogIn struct {
 	Content string `json:"content" gorm:"size:1000"`
 }
 
-func (dataLogIn DataLogIn) ToDataLogIn() (*model.DataLog, error) {
+func (dataLogIn DataLogIn) ToDataLog() (*model.DataLog, error) {
 	dataLog := &model.DataLog{}
 	if err := mapper.AutoMapper(&dataLogIn, dataLog); err != nil {
 		return dataLog, err
