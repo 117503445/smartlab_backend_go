@@ -50,6 +50,7 @@ func init() {
 			}
 			return &u
 		},
+
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			var userLoginDto dto.UserLoginIn
 			if err := c.ShouldBindJSON(&userLoginDto); err != nil {

@@ -54,7 +54,6 @@ func UserCreate(c *gin.Context) {
 	}
 }
 
-// UserRead 用户详情
 func UserRead(c *gin.Context) {
 	user := service.CurrentUser(c)
 	if userOut, err := dto.UserToUserOut(user); err == nil {
@@ -126,5 +125,17 @@ func UserUpdate(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusModelToDtoError, "UserToUserOut failed", err))
 	}
+
+}
+
+// UserRead godoc
+// @Summary Login
+// @Description 登陆账户，返回 JWT
+// @Accept  json
+// @Produce  json
+// @param userLoginIn body dto.UserLoginIn true "dto.userLoginIn"
+// @Success 200 {array} dto.UserOut
+// @Router /user/login [post]
+func LoginForSwagger() {
 
 }

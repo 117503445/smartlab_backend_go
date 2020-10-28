@@ -1,4 +1,42 @@
 basePath: /api
+definitions:
+  dto.BulletinIn:
+    properties:
+      imageUrl:
+        type: string
+      title:
+        type: string
+    type: object
+  dto.UserLoginIn:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  dto.UserOut:
+    properties:
+      avatar:
+        type: string
+      id:
+        type: integer
+      role:
+        items:
+          type: string
+        type: array
+      username:
+        type: string
+    type: object
+  model.Bulletin:
+    properties:
+      imageUrl:
+        type: string
+      title:
+        type: string
+    type: object
 host: localhost
 info:
   contact:
@@ -11,6 +49,44 @@ info:
   title: smartlab
   version: "1.0"
 paths:
+  /Bulletin:
+    get:
+      consumes:
+      - application/json
+      description: 读取所有公告
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Bulletin'
+            type: array
+      summary: BulletinReadAll
+    post:
+      consumes:
+      - application/json
+      description: 创建公告，需要管理员权限。
+      parameters:
+      - description: dto.BulletinIn
+        in: body
+        name: BulletinIn
+        required: true
+        schema:
+          $ref: '#/definitions/dto.BulletinIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Bulletin'
+            type: array
+      security:
+      - JWT: []
+      summary: BulletinCreate
   /ping:
     post:
       consumes:
@@ -25,6 +101,28 @@ paths:
           schema:
             type: string
       summary: 状态检查
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 登陆账户，返回 JWT
+      parameters:
+      - description: dto.userLoginIn
+        in: body
+        name: userLoginIn
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserLoginIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserOut'
+            type: array
+      summary: Login
 schemes:
 - http
 securityDefinitions:

@@ -13,3 +13,9 @@ type Bulletin struct {
 func CreateBulletin(bulletin *Bulletin) {
 	DB.Save(bulletin)
 }
+
+func ReadAllBulletin() *[]Bulletin {
+	var bulletins []Bulletin
+	DB.Find(&bulletins)
+	return &bulletins
+}
