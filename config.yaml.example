@@ -14,3 +14,6 @@ wechat:
   secret:
 serverchan:
   - VIEW https://sc.ftqq.com/3.version
+swagger:
+  host: localhost
+  scheme: http

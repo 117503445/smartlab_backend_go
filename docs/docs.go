@@ -80,7 +80,7 @@ var SwaggerInfo = swaggerInfo{
 	Version:     "1.0",
 	Host:        "localhost",
 	BasePath:    "/api",
-	Schemes:     []string{"http", "https"},
+	Schemes:     []string{"http"},
 	Title:       "smartlab",
 	Description: "",
 }

@@ -6,6 +6,8 @@ ADD go.sum .
 RUN go mod download
 WORKDIR /go/release
 ADD . .
+RUN go get -u github.com/swaggo/swag/cmd/swag
+RUN swag i
 RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -installsuffix cgo -o app
 FROM alpine as prod
 EXPOSE 80

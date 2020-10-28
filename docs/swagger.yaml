@@ -27,7 +27,6 @@ paths:
       summary: 状态检查
 schemes:
 - http
-- https
 securityDefinitions:
   JWT:
     in: header
