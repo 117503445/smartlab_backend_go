@@ -2,7 +2,7 @@
 .idea
 config.yaml
 /data
-scripts/get_data_log/data
-scripts/get_data_log/__pycache__
-scripts/get_data_log/config.json
+admin-python-cli/data
+admin-python-cli/__pycache__
+admin-python-cli/config.json
 *.pyc
