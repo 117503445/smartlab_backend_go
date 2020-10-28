@@ -15,7 +15,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @param BulletinIn body dto.BulletinIn true "dto.BulletinIn"
-// @Success 200 {array} model.Bulletin
+// @Success 200 {array} dto.BulletinOut
 // @Security JWT
 // @Router /Bulletin [post]
 func BulletinCreate(c *gin.Context) {
@@ -38,16 +38,19 @@ func BulletinCreate(c *gin.Context) {
 	}
 
 	model.CreateBulletin(bulletin)
-	c.JSON(http.StatusOK, bulletin)
+	bulletinOut, _ := dto.FromBulletin(bulletin)
+	c.JSON(http.StatusOK, bulletinOut)
 }
+
 // BulletinReadAll godoc
 // @Summary BulletinReadAll
 // @Description 读取所有公告
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} model.Bulletin
+// @Success 200 {array} dto.BulletinOut
 // @Router /Bulletin [get]
 func BulletinReadAll(c *gin.Context) {
 	bulletins := model.ReadAllBulletin()
-	c.JSON(http.StatusOK, bulletins)
+	bulletinOut, _ := dto.FromBulletins(*bulletins)
+	c.JSON(http.StatusOK, bulletinOut)
 }
