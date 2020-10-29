@@ -625,7 +625,7 @@ func TestBulletinDeleteNoRoleError(t *testing.T) {
 		assert.Equal(t, expectResponse[k], response[k])
 	}
 }
-func TestBulletDeleteIn(t *testing.T) {
+func TestBulletDelete(t *testing.T) {
 	filePath := util.FilePasswordAdmin
 	bytes, err := ioutil.ReadFile(filePath)
 	assert.Nil(t, err)
