@@ -7,6 +7,7 @@ import (
 	"smartlab/dto"
 	"smartlab/model"
 	"smartlab/serializer"
+	"strconv"
 )
 
 // BulletinCreate godoc
@@ -53,4 +54,40 @@ func BulletinReadAll(c *gin.Context) {
 	bulletins := model.ReadAllBulletin()
 	bulletinOut, _ := dto.FromBulletins(*bulletins)
 	c.JSON(http.StatusOK, bulletinOut)
+}
+// BulletinDelete godoc
+// @Summary BulletinDelete
+// @Description 删除公告，需要管理员权限。
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} dto.BulletinOut
+// @param id query int true "DeleteBulletin.ID"
+// @Security JWT
+// @Router /Bulletin/{id} [delete]
+func BulletinDelete(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, serializer.Err(http.StatusBadRequest, "id is not number", err))
+		return
+	}
+	bulletin, err := model.ReadBulletinById(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, serializer.Err(serializer.StatusDBError, "bulletin not found", err))
+		return
+	}
+
+	if err := dto.DeleteBulletin(bulletin); err != nil{
+		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusDBError, "bulletin not found", err))
+		return
+	}else{
+		if BulletinOut, err := dto.FromBulletin(bulletin); err != nil {
+			c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusModelToDtoError, "dto.FromBulletin failed", err))
+			return
+		}else{
+			c.JSON(http.StatusOK, BulletinOut)
+			return
+		}
+
+	}
+
 }

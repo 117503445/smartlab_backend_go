@@ -28,6 +28,7 @@ func NewRouter() *gin.Engine {
 			auth.Use(middleware.HasRole("admin"))
 			{
 				auth.POST("", api.BulletinCreate)
+				auth.DELETE(":id",api.BulletinDelete)
 			}
 
 		}

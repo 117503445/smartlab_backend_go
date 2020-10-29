@@ -7,6 +7,15 @@ definitions:
       title:
         type: string
     type: object
+  dto.BulletinOut:
+    properties:
+      id:
+        type: integer
+      imageUrl:
+        type: string
+      title:
+        type: string
+    type: object
   dto.UserLoginIn:
     properties:
       password:
@@ -28,13 +37,6 @@ definitions:
           type: string
         type: array
       username:
-        type: string
-    type: object
-  model.Bulletin:
-    properties:
-      imageUrl:
-        type: string
-      title:
         type: string
     type: object
 host: localhost
@@ -61,7 +63,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Bulletin'
+              $ref: '#/definitions/dto.BulletinOut'
             type: array
       summary: BulletinReadAll
     post:
@@ -82,11 +84,34 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Bulletin'
+              $ref: '#/definitions/dto.BulletinOut'
             type: array
       security:
       - JWT: []
       summary: BulletinCreate
+  /Bulletin/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除公告，需要管理员权限。
+      parameters:
+      - description: DeleteBulletin.ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.BulletinOut'
+            type: array
+      security:
+      - JWT: []
+      summary: BulletinDelete
   /ping:
     post:
       consumes:

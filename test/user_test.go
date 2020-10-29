@@ -535,7 +535,7 @@ func TestBulletinCreate(t *testing.T) {
 	expectResponse := gin.H{
 		"imageUrl": "http://xd.117503445.top:8888/public/1.jpg",
 		"title":    "hello",
-		"ID":float64(1),
+		"id":float64(1),
 	}
 
 	for k := range expectResponse {
@@ -593,7 +593,71 @@ func TestBulletinCreateUserNoRoleError(t *testing.T) {
 		assert.Equal(t, expectResponse[k], response[k])
 	}
 }
+func TestBulletinDeleteNoRoleError(t *testing.T) {
+	filePath := util.FilePasswordAdmin
+	bytes, err := ioutil.ReadFile(filePath)
+	assert.Nil(t, err)
+	password := string(bytes)
+	assert.Equal(t, 12, len(password))
 
+	userLoginDto := dto.UserLoginIn{
+		UserName: "admin",
+		Password: password,
+	}
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
+	authorization := "Bearer " + response["token"].(string)
+
+	var bulletinIn = dto.BulletinIn{
+		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
+		Title:    "hello",
+	}
+	httpPostJson(t,r,"/api/Bulletin",   map[string]string{"Authorization": authorization}, bulletinIn )
+
+	code, response := httpDeleteJson(t,r, "/api/Bulletin/1", nil, nil)
+	assert.Equal(t, http.StatusUnauthorized, code)
+
+	expectResponse := gin.H{
+		"message":    "cookie token is empty",
+		"code":float64(401),
+	}
+
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+func TestBulletDeleteIn(t *testing.T) {
+	filePath := util.FilePasswordAdmin
+	bytes, err := ioutil.ReadFile(filePath)
+	assert.Nil(t, err)
+	password := string(bytes)
+	assert.Equal(t, 12, len(password))
+
+	userLoginDto := dto.UserLoginIn{
+		UserName: "admin",
+		Password: password,
+	}
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
+	authorization := "Bearer " + response["token"].(string)
+	var bulletinIn = dto.BulletinIn{
+		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
+		Title:    "hello",
+	}
+	if code, _ := httpPostJson(t,r,"/api/Bulletin",   map[string]string{"Authorization": authorization}, bulletinIn ); code == http.StatusOK{
+		code, response := httpDeleteJson(t, r, "/api/Bulletin/1",  map[string]string{"Authorization": authorization},nil)
+		assert.Equal(t, http.StatusOK, code)
+
+		expectResponse := gin.H{
+			"imageUrl": "http://xd.117503445.top:8888/public/1.jpg",
+			"title":    "hello",
+			"id":float64(1),
+		}
+
+		for k := range expectResponse {
+			assert.Equal(t, expectResponse[k], response[k])
+		}
+	}
+
+}
 func httpRequest(t *testing.T, httpMethod string, router *gin.Engine, url string, headers map[string]string, body string) (responseCode int, responseText string) {
 	request, err := http.NewRequest(httpMethod, url, strings.NewReader(body))
 	assert.Nil(t, err)

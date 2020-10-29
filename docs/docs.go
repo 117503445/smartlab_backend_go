@@ -48,7 +48,7 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Bulletin"
+                                "$ref": "#/definitions/dto.BulletinOut"
                             }
                         }
                     }
@@ -85,7 +85,44 @@ var doc = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Bulletin"
+                                "$ref": "#/definitions/dto.BulletinOut"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/Bulletin/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "description": "删除公告，需要管理员权限。",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "BulletinDelete",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "DeleteBulletin.ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.BulletinOut"
                             }
                         }
                     }
@@ -160,6 +197,20 @@ var doc = `{
                 }
             }
         },
+        "dto.BulletinOut": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "imageUrl": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "dto.UserLoginIn": {
             "type": "object",
             "required": [
@@ -191,17 +242,6 @@ var doc = `{
                     }
                 },
                 "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "model.Bulletin": {
-            "type": "object",
-            "properties": {
-                "imageUrl": {
-                    "type": "string"
-                },
-                "title": {
                     "type": "string"
                 }
             }

@@ -24,7 +24,9 @@ func AdminUserRead(c *gin.Context) {
 	}
 	if userOut, err := dto.UserToUserOut(user); err == nil {
 		c.JSON(http.StatusOK, userOut)
+		return
 	} else {
 		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusModelToDtoError, "UserToUserOut failed", err))
+		return
 	}
 }
