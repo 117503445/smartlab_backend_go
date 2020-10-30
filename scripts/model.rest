@@ -33,7 +33,7 @@ POST http://localhost/api/feedback
 }
 
 ###
-GET http://localhost/api/feedback/csv
+GET http://localhost/api/Bulletin/1
 
 ###
 
