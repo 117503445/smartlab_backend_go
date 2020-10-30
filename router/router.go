@@ -22,13 +22,13 @@ func NewRouter() *gin.Engine {
 		bulletin := groupApi.Group("Bulletin")
 		{
 			bulletin.GET("", api.BulletinReadAll)
-
+			bulletin.GET(":id", api.BulletinRead)
 			auth := bulletin.Group("")
 			auth.Use(middleware.JwtMiddleware.MiddlewareFunc())
 			auth.Use(middleware.HasRole("admin"))
 			{
 				auth.POST("", api.BulletinCreate)
-				auth.DELETE(":id",api.BulletinDelete)
+				auth.DELETE(":id", api.BulletinDelete)
 			}
 
 		}

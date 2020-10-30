@@ -55,6 +55,7 @@ func BulletinReadAll(c *gin.Context) {
 	bulletinOut, _ := dto.FromBulletins(*bulletins)
 	c.JSON(http.StatusOK, bulletinOut)
 }
+
 // BulletinDelete godoc
 // @Summary BulletinDelete
 // @Description 删除公告，需要管理员权限。
@@ -76,18 +77,48 @@ func BulletinDelete(c *gin.Context) {
 		return
 	}
 
-	if err := dto.DeleteBulletin(bulletin); err != nil{
+	if err := dto.DeleteBulletin(bulletin); err != nil {
 		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusDBError, "bulletin not found", err))
 		return
-	}else{
-		if BulletinOut, err := dto.FromBulletin(bulletin); err != nil {
-			c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusModelToDtoError, "dto.FromBulletin failed", err))
-			return
-		}else{
-			c.JSON(http.StatusOK, BulletinOut)
-			return
-		}
-
 	}
 
+	if BulletinOut, err := dto.FromBulletin(bulletin); err != nil {
+		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusModelToDtoError, "dto.FromBulletin failed", err))
+		return
+	} else {
+		c.JSON(http.StatusOK, BulletinOut)
+		return
+	}
+
+}
+
+// BulletinRead godoc
+// @Summary BulletinRead
+// @Description 读取指定公告
+// @Accept  json
+// @Produce  json
+// @param id query int true "Bulletin.ID"
+// @Success 200 {array} dto.BulletinOut
+// @Router /Bulletin/{id} [get]
+func BulletinRead(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, serializer.Err(http.StatusBadRequest, "id is not number", err))
+		return
+	}
+
+	bulletin, err := model.ReadBulletinById(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, serializer.Err(serializer.StatusDBError, "bulletin not found", err))
+		return
+	}
+
+	if BulletinOut, err := dto.FromBulletin(bulletin); err != nil {
+		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusModelToDtoError, "dto.FromBulletin failed", err))
+		return
+	} else {
+		c.JSON(http.StatusOK, BulletinOut)
+		return
+	}
 }

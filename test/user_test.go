@@ -529,13 +529,13 @@ func TestBulletinCreate(t *testing.T) {
 		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
 		Title:    "hello",
 	}
-	code, response := httpPostJson(t, r, "/api/Bulletin",  map[string]string{"Authorization": authorization}, bulletinIn)
+	code, response := httpPostJson(t, r, "/api/Bulletin", map[string]string{"Authorization": authorization}, bulletinIn)
 	assert.Equal(t, http.StatusOK, code)
 
 	expectResponse := gin.H{
 		"imageUrl": "http://xd.117503445.top:8888/public/1.jpg",
 		"title":    "hello",
-		"id":float64(1),
+		"id":       float64(1),
 	}
 
 	for k := range expectResponse {
@@ -551,8 +551,8 @@ func TestBulletinCreateNoRoleError(t *testing.T) {
 	assert.Equal(t, http.StatusUnauthorized, code)
 
 	expectResponse := gin.H{
-		"message":    "cookie token is empty",
-		"code":float64(401),
+		"message": "cookie token is empty",
+		"code":    float64(401),
 	}
 
 	for k := range expectResponse {
@@ -581,12 +581,12 @@ func TestBulletinCreateUserNoRoleError(t *testing.T) {
 		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
 		Title:    "hello",
 	}
-	code, response := httpPostJson(t, r, "/api/Bulletin",  map[string]string{"Authorization": authorization}, bulletinIn)
+	code, response := httpPostJson(t, r, "/api/Bulletin", map[string]string{"Authorization": authorization}, bulletinIn)
 	assert.Equal(t, http.StatusUnauthorized, code)
 
 	expectResponse := gin.H{
-		"message":    "has role failed: don't have role admin",
-		"code":float64(401),
+		"message": "has role failed: don't have role admin",
+		"code":    float64(401),
 	}
 
 	for k := range expectResponse {
@@ -611,21 +611,35 @@ func TestBulletinDeleteNoRoleError(t *testing.T) {
 		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
 		Title:    "hello",
 	}
-	httpPostJson(t,r,"/api/Bulletin",   map[string]string{"Authorization": authorization}, bulletinIn )
+	httpPostJson(t, r, "/api/Bulletin", map[string]string{"Authorization": authorization}, bulletinIn)
 
-	code, response := httpDeleteJson(t,r, "/api/Bulletin/1", nil, nil)
+	code, response := httpDeleteJson(t, r, "/api/Bulletin/1", nil, nil)
 	assert.Equal(t, http.StatusUnauthorized, code)
 
 	expectResponse := gin.H{
-		"message":    "cookie token is empty",
-		"code":float64(401),
+		"message": "cookie token is empty",
+		"code":    float64(401),
 	}
 
 	for k := range expectResponse {
 		assert.Equal(t, expectResponse[k], response[k])
 	}
 }
-func TestBulletDelete(t *testing.T) {
+func TestBulletinRead(t *testing.T) {
+	//获取TestBulletinCreate中生成的bulletin
+	code, response := httpGetJson(t, r, "/api/Bulletin/1", nil)
+	assert.Equal(t, http.StatusOK, code)
+	expectResponse := gin.H{
+		"imageUrl": "http://xd.117503445.top:8888/public/1.jpg",
+		"title":    "hello",
+		"id":       float64(1),
+	}
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+func TestBulletinDelete(t *testing.T) {
+	//因为删除TestBulletinCreate中生成的bulletin，所以如果单独执行该函数将fail
 	filePath := util.FilePasswordAdmin
 	bytes, err := ioutil.ReadFile(filePath)
 	assert.Nil(t, err)
@@ -638,23 +652,18 @@ func TestBulletDelete(t *testing.T) {
 	}
 	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
 	authorization := "Bearer " + response["token"].(string)
-	var bulletinIn = dto.BulletinIn{
-		ImageUrl: "http://xd.117503445.top:8888/public/1.jpg",
-		Title:    "hello",
-	}
-	if code, _ := httpPostJson(t,r,"/api/Bulletin",   map[string]string{"Authorization": authorization}, bulletinIn ); code == http.StatusOK{
-		code, response := httpDeleteJson(t, r, "/api/Bulletin/1",  map[string]string{"Authorization": authorization},nil)
-		assert.Equal(t, http.StatusOK, code)
-
-		expectResponse := gin.H{
-			"imageUrl": "http://xd.117503445.top:8888/public/1.jpg",
-			"title":    "hello",
-			"id":float64(1),
+	code, _ := httpDeleteJson(t, r, "/api/Bulletin/1", map[string]string{"Authorization": authorization}, nil)
+	assert.Equal(t, http.StatusOK, code)
+	code, response = httpGetJson(t, r, "/api/Bulletin/1", nil)
+	assert.Equal(t, http.StatusNotFound, code)
+	expectResponse :=
+		gin.H{
+			"message": "bulletin not found",
+			"code":    float64(50001),
 		}
 
-		for k := range expectResponse {
-			assert.Equal(t, expectResponse[k], response[k])
-		}
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
 	}
 
 }

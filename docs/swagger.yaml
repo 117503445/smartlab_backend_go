@@ -112,6 +112,26 @@ paths:
       security:
       - JWT: []
       summary: BulletinDelete
+    get:
+      consumes:
+      - application/json
+      description: 读取指定公告
+      parameters:
+      - description: Bulletin.ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.BulletinOut'
+            type: array
+      summary: BulletinRead
   /ping:
     post:
       consumes:
