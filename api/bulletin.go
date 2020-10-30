@@ -1,12 +1,16 @@
 package api
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"io/ioutil"
 	"net/http"
 	"smartlab/dto"
 	"smartlab/model"
 	"smartlab/serializer"
+	"smartlab/util"
 	"strconv"
 )
 
@@ -121,4 +125,63 @@ func BulletinRead(c *gin.Context) {
 		c.JSON(http.StatusOK, BulletinOut)
 		return
 	}
+}
+// BulletinUpdate godoc
+// @Summary BulletinUpdate
+// @Description 修改指定公告
+// @Accept  json
+// @Produce  json
+// @param id query int true "Bulletin.ID"
+// @Success 200 {array} dto.BulletinOut
+// @Router /Bulletin/{id} [put]
+func BulletinUpdate(c *gin.Context) {
+	//userUpdateIn := &dto.UserUpdateIn{}
+	//var err error
+
+	newBulletinBytes, _ := ioutil.ReadAll(c.Request.Body)
+	var mapNewBulletin map[string]interface{}
+	if err := json.Unmarshal(newBulletinBytes, &mapNewBulletin); err != nil {
+		fmt.Println(err)
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, serializer.Err(http.StatusBadRequest, "id is not number", err))
+		return
+	}
+
+	bulletin , err := model.ReadBulletinById(id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, serializer.Err(serializer.StatusDBError, "bulletin not found", err))
+		return
+	}
+
+	if newTitle, ok := mapNewBulletin["title"]; ok {
+		count := int64(0)
+		model.DB.Model(&model.Bulletin{}).Where("title = ?", newTitle).Count(&count)
+		if count > 0 && newTitle != bulletin.Title {
+			// 修改 Title 后 发生重名
+			c.JSON(http.StatusBadRequest, serializer.Err(serializer.StatusBulletinTitleRepeat, "Bulletin has already exists.", nil))
+			return
+		}
+	}
+	if newImageUrl, ok := mapNewBulletin["imageUrl"]; ok {
+		count := int64(0)
+		model.DB.Model(&model.Bulletin{}).Where("image_url = ?", newImageUrl,"'").Count(&count)
+		if count > 0 && newImageUrl != bulletin.ImageUrl {
+			// 修改 ImageUrl 后 出现重复
+			c.JSON(http.StatusBadRequest, serializer.Err(serializer.StatusBulletinImageUrlRepeat, "Bulletin has already exists.", nil))
+			return
+		}
+	}
+	util.SetStructFieldByMap(bulletin, mapNewBulletin, []string{"imageUrl","title"})
+
+	model.DB.Save(bulletin)
+
+	if bulletinOut, err := dto.FromBulletin(bulletin); err == nil {
+		c.JSON(http.StatusOK, bulletinOut)
+	} else {
+		c.JSON(http.StatusInternalServerError, serializer.Err(serializer.StatusModelToDtoError, "FromBulletin failed", err))
+	}
+
 }

@@ -26,12 +26,16 @@ const (
 	StatusWeChatLoginError = 50005
 	// StatusParamError 各种奇奇怪怪的参数错误
 	StatusParamError = 40001
-	// StatusUsernameRepeat 用户名重复
-	StatusUsernameRepeat = 40002
+	// StatusUserNameRepeat 用户名重复
+	StatusUserNameRepeat = 40002
 	// StatusDtoToModelError Dto 转 Model 失败
 	StatusDtoToModelError = 40003
 	// StatusParamNotValid 参数不合法
 	StatusParamNotValid = 40004
+	// StatusBulletinTitleRepeat 公告标题重复
+	StatusBulletinTitleRepeat = 40005
+	// StatusBulletinImageUrlRepeat 公告链接重复
+	StatusBulletinImageUrlRepeat = 40006
 )
 
 // Err 通用错误处理

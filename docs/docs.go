@@ -123,6 +123,36 @@ var doc = `{
                     }
                 }
             },
+            "put": {
+                "description": "修改指定公告",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "BulletinUpdate",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Bulletin.ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.BulletinOut"
+                            }
+                        }
+                    }
+                }
+            },
             "delete": {
                 "security": [
                     {
