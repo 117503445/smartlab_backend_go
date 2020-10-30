@@ -29,6 +29,7 @@ func NewRouter() *gin.Engine {
 			{
 				auth.POST("", api.BulletinCreate)
 				auth.DELETE(":id", api.BulletinDelete)
+				auth.PUT(":id",api.BulletinUpdate)
 			}
 
 		}

@@ -38,7 +38,7 @@ func UserCreate(c *gin.Context) {
 	count := int64(0)
 	model.DB.Model(&model.User{}).Where("username = ?", userCreateIn.UserName).Count(&count)
 	if count > 0 {
-		c.JSON(http.StatusBadRequest, serializer.Err(serializer.StatusUsernameRepeat, "Username has already exists.", nil))
+		c.JSON(http.StatusBadRequest, serializer.Err(serializer.StatusUserNameRepeat, "Username has already exists.", nil))
 		return
 	}
 
@@ -105,7 +105,7 @@ func UserUpdate(c *gin.Context) {
 		model.DB.Model(&model.User{}).Where("username = ?", newName).Count(&count)
 		if count > 0 && newName != user.Username {
 			// 修改 Username 后 发生重名
-			c.JSON(http.StatusBadRequest, serializer.Err(serializer.StatusUsernameRepeat, "Username has already exists.", nil))
+			c.JSON(http.StatusBadRequest, serializer.Err(serializer.StatusUserNameRepeat, "Username has already exists.", nil))
 			return
 		}
 	}

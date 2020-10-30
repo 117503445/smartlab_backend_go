@@ -300,7 +300,7 @@ func TestUserUpdateRepeatUsernameError(t *testing.T) {
 
 	assert.Equal(t, http.StatusBadRequest, code)
 	expectResponse := gin.H{
-		"code":    float64(serializer.StatusUsernameRepeat),
+		"code":    float64(serializer.StatusUserNameRepeat),
 		"message": "Username has already exists.",
 	}
 	for k := range expectResponse {
@@ -634,6 +634,36 @@ func TestBulletinRead(t *testing.T) {
 		"title":    "hello",
 		"id":       float64(1),
 	}
+	for k := range expectResponse {
+		assert.Equal(t, expectResponse[k], response[k])
+	}
+}
+func TestBulletinUpdate(t *testing.T){
+	filePath := util.FilePasswordAdmin
+	bytes, err := ioutil.ReadFile(filePath)
+	assert.Nil(t, err)
+	password := string(bytes)
+	assert.Equal(t, 12, len(password))
+
+	userLoginDto := dto.UserLoginIn{
+		UserName: "admin",
+		Password: password,
+	}
+	_, response := httpPostJson(t, r, "/api/user/login", nil, userLoginDto)
+	authorization := "Bearer " + response["token"].(string)
+	BulletinUpdate := dto.BulletinIn{
+		ImageUrl: "http://xd.117503445.top:8888/public/2.jpg",
+		Title:    "hello world!",
+	}
+	code, response := httpPutJson(t, r, "/api/Bulletin/1", map[string]string{"Authorization": authorization}, BulletinUpdate)
+	assert.Equal(t, http.StatusOK, code)
+
+	expectResponse := gin.H{
+		"imageUrl": "http://xd.117503445.top:8888/public/2.jpg",
+		"title":    "hello world!",
+		"id":       float64(1),
+	}
+
 	for k := range expectResponse {
 		assert.Equal(t, expectResponse[k], response[k])
 	}
