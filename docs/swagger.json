@@ -94,7 +94,7 @@
                         "type": "integer",
                         "description": "Bulletin.ID",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -111,6 +111,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "description": "修改指定公告",
                 "consumes": [
                     "application/json"
@@ -124,8 +129,17 @@
                         "type": "integer",
                         "description": "Bulletin.ID",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "dto.BulletinIn",
+                        "name": "BulletinIn",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.BulletinIn"
+                        }
                     }
                 ],
                 "responses": {
@@ -159,7 +173,7 @@
                         "type": "integer",
                         "description": "DeleteBulletin.ID",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
