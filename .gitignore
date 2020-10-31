@@ -6,3 +6,4 @@ admin-python-cli/data
 admin-python-cli/__pycache__
 admin-python-cli/config.json
 *.pyc
+mysql.env

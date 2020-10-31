@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  web:
+    image: 117503445/smartlab
+    ports:
+      - "80:80"
+    volumes:
+      - ./data:/go/release/data
+    depends_on:
+      - mysql
+    environment:
+      WAIT_HOSTS: mysql:3306
+    links: 
+      - mysql
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - mysql.env
