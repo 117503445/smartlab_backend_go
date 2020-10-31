@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"smartlab/util"
 	"strings"
+	"time"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -18,18 +19,33 @@ var DB *gorm.DB
 // InitDatabase 在中间件中初始化mysql链接
 func InitDatabase() {
 
+	var err error
+
 	host := viper.Get("mysql.host")
 	port := viper.Get("mysql.port")
 	username := viper.Get("mysql.username")
 	password := viper.Get("mysql.password")
 	dbname := viper.GetString("mysql.dbname")
 
+	for {
+		dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/?charset=utf8mb4&parseTime=True&loc=Local", username, password, host, port)
+		util.Log().Info("try to connect database")
+		_, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+		if err != nil {
+			util.Log().Warning("failed to connect database,sleep 5 s", err)
+			time.Sleep(time.Second * 5)
+		} else {
+			util.Log().Info("connect database success")
+			break
+		}
+	}
+
 	if strings.Contains(dbname, "test") {
 		util.Log().Info("dbname contain \"test\", drop and create new\n")
 		_, _ = Exec("drop database " + dbname)
 	}
 
-	_, err := Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %v", dbname))
+	_, err = Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %v", dbname))
 	if err != nil {
 		util.Log().Panic("创建数据库不成功", err)
 	}
