@@ -96,7 +96,7 @@ paths:
       description: 删除公告，需要管理员权限。
       parameters:
       - description: DeleteBulletin.ID
-        in: query
+        in: path
         name: id
         required: true
         type: integer
@@ -118,7 +118,7 @@ paths:
       description: 读取指定公告
       parameters:
       - description: Bulletin.ID
-        in: query
+        in: path
         name: id
         required: true
         type: integer
@@ -138,10 +138,16 @@ paths:
       description: 修改指定公告
       parameters:
       - description: Bulletin.ID
-        in: query
+        in: path
         name: id
         required: true
         type: integer
+      - description: dto.BulletinIn
+        in: body
+        name: BulletinIn
+        required: true
+        schema:
+          $ref: '#/definitions/dto.BulletinIn'
       produces:
       - application/json
       responses:
@@ -151,6 +157,8 @@ paths:
             items:
               $ref: '#/definitions/dto.BulletinOut'
             type: array
+      security:
+      - JWT: []
       summary: BulletinUpdate
   /ping:
     post:

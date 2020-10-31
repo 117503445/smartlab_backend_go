@@ -66,7 +66,7 @@ func BulletinReadAll(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {array} dto.BulletinOut
-// @param id query int true "DeleteBulletin.ID"
+// @param id path int true "DeleteBulletin.ID"
 // @Security JWT
 // @Router /Bulletin/{id} [delete]
 func BulletinDelete(c *gin.Context) {
@@ -101,7 +101,7 @@ func BulletinDelete(c *gin.Context) {
 // @Description 读取指定公告
 // @Accept  json
 // @Produce  json
-// @param id query int true "Bulletin.ID"
+// @param id path int true "Bulletin.ID"
 // @Success 200 {array} dto.BulletinOut
 // @Router /Bulletin/{id} [get]
 func BulletinRead(c *gin.Context) {
@@ -131,8 +131,10 @@ func BulletinRead(c *gin.Context) {
 // @Description 修改指定公告
 // @Accept  json
 // @Produce  json
-// @param id query int true "Bulletin.ID"
+// @param id path int true "Bulletin.ID"
+// @param BulletinIn body dto.BulletinIn true "dto.BulletinIn"
 // @Success 200 {array} dto.BulletinOut
+// @Security JWT
 // @Router /Bulletin/{id} [put]
 func BulletinUpdate(c *gin.Context) {
 	//userUpdateIn := &dto.UserUpdateIn{}
