@@ -13,7 +13,7 @@ debug = config['debug']
 
 dir_data = pathlib.Path('data')
 
-meta = [["获取所有 DataLog", "get_data_log"], ["发布公告", "send_bulletin"]]
+meta = [["获取所有 DataLog", "get_data_log"], ["发布公告", "send_bulletin"],["查看公告","get_bulletins"],["删除公告","delete_bulletin"]]
 
 if debug:
     host = 'http://localhost:80/api'
@@ -84,12 +84,38 @@ def send_bulletin():
     url = f"{host}/Bulletin"
     print(url)
 
+    image_url =input( 'please input image url\n')
+    title = input('please input title\n')
     bulletin_in = {
-        "ImageUrl": "https://s1.ax1x.com/2020/10/28/B3qPqH.png",
-        "Title": "测试公告"
+        "ImageUrl": image_url,
+        "Title": title
     }
 
     s.post(url, json.dumps(bulletin_in))
+
+def get_bulletins():
+    s = requests.session()
+
+    # login(s)
+    global host
+    url = f"{host}/Bulletin"
+    print(url)
+    r = s.get(url)
+    print(r.text)
+
+
+
+def delete_bulletin():
+    get_bulletins()
+    s = requests.session()
+
+    login(s)
+    global host
+    id = input('please input id you want to delete\n')
+    url = f"{host}/Bulletin/{id}"
+
+
+    s.delete(url)
 
 
 def main():
